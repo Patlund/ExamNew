@@ -20,9 +20,18 @@ router.post('/api/addItem', async (req, res) => {
 
 router.get('/api/getAllItems', async (req, res) => {
     const db = await pool.getConnection();
-    const preparedStatement = await db.prepare('SELECT * FROM personalInfo')
+    const preparedStatement = await db.prepare('SELECT * FROM personalInfo');
     const result = await preparedStatement.execute();
     res.json(result[0]);
+    db.release();
+})
+
+router.delete('/api/deleteItem', async (req, res) => {
+    const db = await pool.getConnection();
+    const itemId = req.body.itemId;
+    const preparedStatement = await db.prepare('DELETE FROM personalInfo WHERE itemId = ?');
+    await preparedStatement.execute([itemId]);
+    res.json({ success: true })
     db.release();
 })
 

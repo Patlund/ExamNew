@@ -2,10 +2,9 @@
     import Card from "./Card.svelte";
     import Button from "./Button.svelte";
     import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher();
 
     export let item;
-
-    const dispatch = createEventDispatcher();
 </script>
 
 <Card>
@@ -16,7 +15,12 @@
             <li>{item.hobby}</li>
         </ul>
         <div class="delete">
-            <Button type="deleteItem">Delete</Button>
+            <Button
+                type="deleteItem"
+                on:click={() => dispatch("deleteItem", item)}
+            >
+                Delete
+            </Button>
         </div>
     </div>
 </Card>
