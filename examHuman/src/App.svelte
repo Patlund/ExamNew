@@ -1,7 +1,7 @@
 <script>
     import ItemList from "./components/ItemList.svelte";
     import NewItemForm from "./components/NewItemForm.svelte";
-    import Tabs from "./components/Tabs.svelte";
+    import Tabs from "./components/structuralComponents/Tabs.svelte";
 
     let items = ["Items", "Add New Item"];
     let activeItem = "Items";

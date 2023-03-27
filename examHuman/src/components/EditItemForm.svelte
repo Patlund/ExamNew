@@ -1,9 +1,11 @@
 <script>
     import Card from "./structuralComponents/Card.svelte";
+    export let item;
     import Button from "./structuralComponents/Button.svelte";
     import { createEventDispatcher } from "svelte/internal";
+    
 
-    let fields = { name: "", country: "", hobby: "" };
+    let fields = { name: {item.name}, country: "", hobby: "" };
     let errors = { name: "", country: "", hobby: "" };
     let valid = false;
 
@@ -56,26 +58,24 @@
 </script>
 
 <div class="wrapper">
-    <Card>
-        <form on:submit|preventDefault={submitHandler}>
-            <div class="form-field">
-                <label for="fullName">Enter your full name</label>
-                <input type="text" id="name" bind:value={fields.name} />
-                <div class="error">{errors.name}</div>
-            </div>
-            <div class="form-field">
-                <label for="country">Which country do you live in?</label>
-                <input type="text" id="country" bind:value={fields.country} />
-                <div class="error">{errors.country}</div>
-            </div>
-            <div class="form-field">
-                <label for="hobby">What's your favourite hobby?</label>
-                <input type="text" id="hobby" bind:value={fields.hobby} />
-                <div class="error">{errors.hobby}</div>
-            </div>
-            <Button type="addItem">Add Item</Button>
-        </form>
-    </Card>
+    <form on:submit|preventDefault={submitHandler}>
+        <div class="form-field">
+            <label for="fullName">Enter your full name</label>
+            <input type="text" id="name" bind:value={fields.name} />
+            <div class="error">{errors.name}</div>
+        </div>
+        <div class="form-field">
+            <label for="country">Which country do you live in?</label>
+            <input type="text" id="country" bind:value={fields.country} />
+            <div class="error">{errors.country}</div>
+        </div>
+        <div class="form-field">
+            <label for="hobby">What's your favourite hobby?</label>
+            <input type="text" id="hobby" bind:value={fields.hobby} />
+            <div class="error">{errors.hobby}</div>
+        </div>
+        <Button type="addItem">Confirm</Button>
+    </form>
 </div>
 
 <style>

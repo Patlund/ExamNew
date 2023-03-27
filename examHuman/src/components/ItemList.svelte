@@ -2,8 +2,11 @@
     import ItemDetails from "./ItemDetails.svelte";
     import { fade, scale } from "svelte/transition";
     import { flip } from "svelte/animate";
+    import Modal from "./structuralComponents/EditModal.svelte";
 
     let items = [];
+    let showModal = false;
+    let modalItem = [];
     async function getItems() {
         const response = await fetch("/api/getAllItems");
         const data = await response.json();
@@ -28,14 +31,26 @@
         console.log(changedArray);
         items = changedArray;
     };
+
+    const modifyItem = async (e) => {
+        showModal = true;
+        modalItem = e.detail;
+    };
 </script>
 
 <div class="item-list">
     {#each items as item (item.itemId)}
         <div in:fade out:scale|local animate:flip={{ duration: 500 }}>
-            <ItemDetails {item} on:deleteItem={deleteItem} />
+            <ItemDetails
+                {item}
+                on:deleteItem={deleteItem}
+                on:modifyItem={modifyItem}
+            />
         </div>
     {/each}
+    {#if showModal == true}
+        <Modal bind:showModal {modalItem} />
+    {/if}
 </div>
 
 <style>

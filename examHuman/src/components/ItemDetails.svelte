@@ -1,6 +1,6 @@
 <script>
-    import Card from "./Card.svelte";
-    import Button from "./Button.svelte";
+    import Card from "./structuralComponents/Card.svelte";
+    import Button from "./structuralComponents/Button.svelte";
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
 
@@ -20,6 +20,14 @@
                 on:click={() => dispatch("deleteItem", item)}
             >
                 Delete
+            </Button>
+        </div>
+        <div class="modify">
+            <Button
+                type="addItem"
+                on:click={() => dispatch("modifyItem", item)}
+            >
+                Modify
             </Button>
         </div>
     </div>
