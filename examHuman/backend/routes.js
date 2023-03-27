@@ -35,5 +35,15 @@ router.delete('/api/deleteItem', async (req, res) => {
     db.release();
 })
 
+router.put('/api/updateItem', async (req,res) => {
+    const db = await pool.getConnection();
+    const item = req.body;
+    console.log(item);
+    const preparedStatement = await db.prepare('UPDATE personalInfo SET name = ? ,country = ?,hobby = ? WHERE itemId = ?');
+    await preparedStatement.execute([item.name,item.country,item.hobby,item.itemId]);
+    res.json({success: true})
+    db.release();
+})
+
 
 export default router;

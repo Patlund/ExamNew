@@ -3,20 +3,22 @@
     import { fade, scale } from "svelte/transition";
     import { flip } from "svelte/animate";
     import Modal from "./structuralComponents/EditModal.svelte";
+    import { items }  from "./Store";
 
-    let items = [];
+    
     let showModal = false;
     let modalItem = [];
-    async function getItems() {
+
+    export async function getItems() {
         const response = await fetch("/api/getAllItems");
         const data = await response.json();
-        items = data;
-        items.reverse();
+        items.set(data);
+        items.update(value => value.reverse());
     }
+
     getItems();
 
     const deleteItem = async (e) => {
-        console.log(e.detail.itemId);
         const itemId = e.detail.itemId;
         await fetch("/api/deleteItem", {
             method: "DELETE",
@@ -27,19 +29,18 @@
                 "Content-Type": "application/json",
             },
         }).catch((err) => console.log(err));
-        let changedArray = items.filter((item) => itemId != item.itemId);
-        console.log(changedArray);
-        items = changedArray;
+        items.update(value =>value.filter((value) => itemId != value.itemId));
     };
 
     const modifyItem = async (e) => {
         showModal = true;
         modalItem = e.detail;
     };
+
 </script>
 
 <div class="item-list">
-    {#each items as item (item.itemId)}
+    {#each $items as item (item.itemId)}
         <div in:fade out:scale|local animate:flip={{ duration: 500 }}>
             <ItemDetails
                 {item}
@@ -49,7 +50,7 @@
         </div>
     {/each}
     {#if showModal == true}
-        <Modal bind:showModal {modalItem} />
+        <Modal bind:showModal {modalItem} {getItems}/>
     {/if}
 </div>
 
