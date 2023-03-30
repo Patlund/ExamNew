@@ -44,6 +44,7 @@
 
 {#if showModal}
     <div class="modal">
+        <div class="modal-content">
         <form on:submit|preventDefault={submitHandler}>
             <div class="form-field">
                 <label for="fullName">Enter your full name</label>
@@ -66,13 +67,13 @@
             </div>
             <Button type="addItem">Confirm</Button>
         </form>
-        <div class="modal-content" />
+        </div>
     </div>
 {/if}
 
 <style>
     .modal {
-        position: fixed;
+        position:absolute;
         z-index: 1;
         left: 0;
         top: 0;
@@ -86,9 +87,12 @@
 
     .modal-content {
         background-color: white;
-        padding: 20px;
+        padding: 50px;
         border-radius: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 10;
+        padding-right: 60px;
+        
     }
 
     form {
@@ -112,6 +116,7 @@
         margin: 10px auto;
         text-align: left;
         display: block;
+        font-weight: bold;
     }
 
     .error {
