@@ -1,13 +1,12 @@
 <script>
     import Button from "./Button.svelte";
-    import {items} from "../Store";
 
 
     export let getItems;
     export let showModal = false;
     export let modalItem;
 
-
+    
     let errors = { name: "", country: "", hobby: "" };
     let { itemId ,name, country, hobby } = modalItem;
 
@@ -18,9 +17,36 @@
         console.log("From the modal: " + showModal);
     }
 
+    
+
 
     async function submitHandler(){
-        console.log("name: " + name + " country: " + country + " hobby: " + hobby);
+
+        let valid = true;
+
+
+        if (name.trim().length < 5 || name.includes('<') || name.includes('>')) {
+            valid = false;
+            errors.name = "Please enter your name and don't use special characters";
+        } else {
+            errors.name = "";
+        }
+        //Validate answer A
+        if (country.trim().length < 1 || country.includes('<') || country.includes('>')) {
+            valid = false;
+            errors.country = "You need to enter the country and don't use special characters"
+        } else {
+            errors.country = "";
+        }
+        //Validate answer B
+        if (hobby.trim().length < 1 || hobby.includes('<') || hobby.includes('>')) {
+            valid = false;
+            errors.hobby = "You need to enter your Hobby and don't use special characters";
+        } else {
+            errors.hobby = "";
+        }
+
+        if(valid){
         await fetch("/api/updateItem", {
                 method: "PUT",
                 body: JSON.stringify({
@@ -36,6 +62,7 @@
         
         getItems();
         toggleModal();
+        }
         
 
         
