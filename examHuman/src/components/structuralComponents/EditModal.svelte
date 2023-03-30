@@ -25,21 +25,21 @@
         let valid = true;
 
 
-        if (name.trim().length < 5 || name.includes('<') || name.includes('>')) {
+        if (name.trim().length < 5 || name.includes('<') || name.includes('>') || name.includes(';')) {
             valid = false;
             errors.name = "Please enter your name and don't use special characters";
         } else {
             errors.name = "";
         }
         //Validate answer A
-        if (country.trim().length < 1 || country.includes('<') || country.includes('>')) {
+        if (country.trim().length < 1 || country.includes('<') || country.includes('>') || country.includes(';')) {
             valid = false;
             errors.country = "You need to enter the country and don't use special characters"
         } else {
             errors.country = "";
         }
         //Validate answer B
-        if (hobby.trim().length < 1 || hobby.includes('<') || hobby.includes('>')) {
+        if (hobby.trim().length < 1 || hobby.includes('<') || hobby.includes('>') || hobby.includes(';')) {
             valid = false;
             errors.hobby = "You need to enter your Hobby and don't use special characters";
         } else {

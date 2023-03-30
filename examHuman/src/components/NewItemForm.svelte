@@ -14,21 +14,21 @@
         const itemId = Math.round(Math.random() * 100000000);
         valid = true;
         //Validate question
-        if (fields.name.trim().length < 5 || fields.name.includes('<') || fields.name.includes('>')) {
+        if (fields.name.trim().length < 5 || fields.name.includes('<') || fields.name.includes('>') || fields.name.includes(';')) {
             valid = false;
             errors.name = "Please enter your name and don't use special characters";
         } else {
             errors.name = "";
         }
         //Validate answer A
-        if (fields.country.trim().length < 1 || fields.country.includes('<') || fields.country.includes('>')) {
+        if (fields.country.trim().length < 1 || fields.country.includes('<') || fields.country.includes('>') || fields.country.includes(';')) {
             valid = false;
             errors.country = "You need to enter the country and don't use special characters";
         } else {
             errors.country = "";
         }
         //Validate answer B
-        if (fields.hobby.trim().length < 1 || fields.hobby.includes('<') || fields.hobby.includes('>')) {
+        if (fields.hobby.trim().length < 1 || fields.hobby.includes('<') || fields.hobby.includes('>') || fields.hobby.includes(';')) {
             valid = false;
             errors.hobby = "You need to enter your Hobby and don't use special characters";
         } else {
