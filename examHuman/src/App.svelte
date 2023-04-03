@@ -27,5 +27,6 @@
     main {
         max-width: 960px;
         margin: 40px auto;
+        font-family: sans-serif;
     }
 </style>

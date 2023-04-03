@@ -31,14 +31,14 @@
         } else {
             errors.name = "";
         }
-        //Validate answer A
+
         if (country.trim().length < 1 || country.includes('<') || country.includes('>') || country.includes(';')) {
             valid = false;
             errors.country = "You need to enter the country and don't use special characters"
         } else {
             errors.country = "";
         }
-        //Validate answer B
+
         if (hobby.trim().length < 1 || hobby.includes('<') || hobby.includes('>') || hobby.includes(';')) {
             valid = false;
             errors.hobby = "You need to enter your Hobby and don't use special characters";
