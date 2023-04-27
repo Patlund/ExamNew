@@ -1,89 +1,51 @@
 <script>
-  import { onMount } from "svelte";
-  import Items from "./Items.svelte";
-  import AddNewItem from "./AddNewItem.svelte";
-
-  let activeMenuItem = "Items";
-
-  function setActiveMenuItem(menuItem) {
-    activeMenuItem = menuItem;
-  }
-
-  let activeComponent;
-
-  function renderActiveComponent() {
-    if (activeMenuItem === "Items") {
-      activeComponent = Items;
-    } else if (activeMenuItem === "Add New Item") {
-      activeComponent = AddNewItem;
+    import { onMount } from 'svelte';
+    import AddNewItem from './AddNewItem.svelte';
+    import Items from './Items.svelte';
+  
+    let activeMenuItem = 'items';
+  
+    onMount(() => {
+      // Set the active menu item based on the current path
+      const path = window.location.pathname;
+      if (path.includes('add-new-items')) {
+        activeMenuItem = 'add-new-items';
+      } else {
+        activeMenuItem = 'items';
+      }
+    });
+  
+    function setActiveMenuItem(menuItem) {
+      activeMenuItem = menuItem;
+      // Update the URL to reflect the active menu item
+      const path = menuItem === 'items' ? '/' : '/add-new-items';
+      window.history.pushState({}, '', path);
     }
-  }
-
-  onMount(() => {
-    renderActiveComponent();
-  });
-</script>
-
-<nav>
-  <ul>
-    <li
-      class:selected={activeMenuItem === "Items"}
-      on:click={() => {
-        setActiveMenuItem("Items");
-        renderActiveComponent();
-      }}
-    >
-      Items
-    </li>
-    <li
-      class:selected={activeMenuItem === "Add New Item"}
-      on:click={() => {
-        setActiveMenuItem("Add New Item");
-        renderActiveComponent();
-      }}
-    >
-      Add New Item
-    </li>
-  </ul>
-</nav>
-
-<main>
-  {#if activeComponent}
-    <svelte:component this={activeComponent} />
-  {/if}
-</main>
-
-<style>
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: #f2f2f2;
-    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  nav li {
-    margin-right: 1rem;
-    padding: 0.5rem;
-    border-bottom: 2px solid transparent;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-
-  nav li:hover {
-    color: red;
-  }
-
-  nav li.selected {
-    color: red;
-    border-bottom: 2px solid red;
-  }
-</style>
+  </script>
+  
+  <style>
+    .menu-item {
+      display: inline-block;
+      padding: 8px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+  
+    .menu-item.active {
+      color: red;
+      border-bottom-color: red;
+    }
+  </style>
+  
+  <div class="menu">
+    <div class="menu-item {activeMenuItem === 'items' ? 'active' : ''}" on:click={() => setActiveMenuItem('items')}>Items</div>
+    <div class="menu-item {activeMenuItem === 'add-new-items' ? 'active' : ''}" on:click={() => setActiveMenuItem('add-new-items')}>Add New Items</div>
+  </div>
+  
+  <div class="content">
+    {#if activeMenuItem === 'items'}
+      <Items />
+    {:else if activeMenuItem === 'add-new-items'}
+      <AddNewItem/>
+    {/if}
+  </div>

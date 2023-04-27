@@ -14,7 +14,6 @@
 
     function toggleModal() {
         showModal = !showModal;
-        console.log("From the modal: " + showModal);
     }
 
     
