@@ -1,69 +1,79 @@
-const express = require('express');
-const mysql = require('mysql2/promise');
+import express from 'express';
+import mysql from 'mysql2';
 
 const app = express();
-
 const pool = mysql.createPool({
   host: 'localhost',
+  port: 3306,
   user: 'root',
   password: '5065.Tess!',
   database: 'ExamAI',
-  connectionLimit: 10
+  connectionLimit: 10,
 });
 
-app.use(express.json());
+// Add item to database
+app.post('/items', (req, res) => {
+  const { name, country, hobby } = req.body;
+  const itemId = Math.floor(Math.random() * 1000000000) + 1;
+  const sql = 'INSERT INTO items (itemId, name, country, hobby) VALUES (?, ?, ?, ?)';
+  const values = [itemId, name, country, hobby];
+  
+  pool.query(sql, values, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
 
-app.post('/items', async (req, res) => {
-  try {
-    const itemId = Math.floor(Math.random() * 1000000000) + 1;
-    const { name, country, hobby } = req.body;
-    const query = 'INSERT INTO items (itemId, name, country, hobby) VALUES (?, ?, ?, ?)';
-    const values = [itemId, name, country, hobby];
-    const result = await pool.query(query, values);
-    res.status(201).json({ success: true, message: 'Item added successfully.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Server error.' });
-  }
+    return res.json({ success: true });
+  });
 });
 
-app.delete('/items/:itemId', async (req, res) => {
-  try {
-    const { itemId } = req.params;
-    const query = 'DELETE FROM items WHERE itemId = ?';
-    const result = await pool.query(query, [itemId]);
-    res.status(200).json({ success: true, message: 'Item deleted successfully.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Server error.' });
-  }
+// Delete item from database by itemId
+app.delete('/items/:itemId', (req, res) => {
+  const itemId = req.params.itemId;
+  const sql = 'DELETE FROM items WHERE itemId = ?';
+
+  pool.query(sql, [itemId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    return res.json({ success: true });
+  });
 });
 
-app.put('/items/:itemId', async (req, res) => {
-  try {
-    const { itemId } = req.params;
-    const { name, country, hobby } = req.body;
-    const query = 'UPDATE items SET name = ?, country = ?, hobby = ? WHERE itemId = ?';
-    const values = [name, country, hobby, itemId];
-    const result = await pool.query(query, values);
-    res.status(200).json({ success: true, message: 'Item updated successfully.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Server error.' });
-  }
+// Update item in database by itemId
+app.put('/items/:itemId', (req, res) => {
+  const itemId = req.params.itemId;
+  const { name, country, hobby } = req.body;
+  const sql = 'UPDATE items SET name = ?, country = ?, hobby = ? WHERE itemId = ?';
+  const values = [name, country, hobby, itemId];
+
+  pool.query(sql, values, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    return res.json({ success: true });
+  });
 });
 
-app.get('/items', async (req, res) => {
-  try {
-    const query = 'SELECT * FROM items';
-    const [rows] = await pool.query(query);
-    res.status(200).json({ success: true, items: rows });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Server error.' });
-  }
+// Get all items from database
+app.get('/items', (req, res) => {
+  const sql = 'SELECT * FROM items';
+
+  pool.query(sql, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    return res.json(results);
+  });
 });
 
 app.listen(3000, () => {
-  console.log('Server running on port 3000.');
+  console.log('Server listening on port 3000');
 });

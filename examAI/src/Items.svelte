@@ -1,106 +1,87 @@
-<script lang="ts">
+<script>
     import { onMount } from 'svelte';
     import Button from './Button.svelte';
-  
+    import UpdateModal from './Modal.svelte';
+    
     let items = [];
+    let showUpdateModal = false;
+    let selectedItem = null;
+
   
-    async function fetchItems() {
+    const fetchItems = async () => {
       const response = await fetch('/api/items');
       items = await response.json();
     }
   
-    onMount(fetchItems);
+    onMount(() => {
+      fetchItems();
+    });
+  
+    const deleteItem = async (itemId) => {
+      await fetch(`/api/items/${itemId}`, { method: 'DELETE' });
+      items = items.filter(item => item.itemId !== itemId);
+    }
+  
+    const updateItem = async (itemId, updatedItem) => {
+      await fetch(`/api/items/${itemId}`, { method: 'PUT', body: JSON.stringify(updatedItem) });
+      const index = items.findIndex(item => item.itemId === itemId);
+      items[index] = updatedItem;
+    }
 
-    function openModal(item) {
-    const modalContent = `
-      <h2>Update Item</h2>
-      <label>Enter your full name</label>
-      <input type="text" name="name" value="${item.name}">
-      <label>Which country do you live in?</label>
-      <input type="text" name="country" value="${item.country}">
-      <label>What's your favourite hobby?</label>
-      <input type="text" name="hobby" value="${item.hobby}">
-    `;
-    showModal(modalContent, () => updateItem(item.itemId));
+    function openUpdateModal(item) {
+    showUpdateModal = true;
+    selectedItem = item;
   }
 
-    async function deleteItem(itemId) {
-      const response = await fetch(`/api/items/${itemId}`, { method: 'DELETE' });
-      if (response.ok) {
-        // remove item from the list
-        items = items.filter(item => item.itemId !== itemId);
-      }
-    }
-  
-    // function to update an item
-  async function updateItem(itemId) {
-    const form = document.querySelector('.modal input[name="name"]').form;
-    const formData = new FormData(form);
-    const body = {
-      name: formData.get('name'),
-      country: formData.get('country'),
-      hobby: formData.get('hobby')
-    };
-    const res = await fetch(`/api/items/${itemId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-    if (res.ok) {
-      const updatedItem = await res.json();
-      items = items.map(item => {
-        if (item.itemId === updatedItem.itemId) {
-          return updatedItem;
-        } else {
-          return item;
-        }
-      });
-    }
-}
+  function closeUpdateModal() {
+    showUpdateModal = false;
+    selectedItem = null;
+  }
   </script>
   
-  <h2>Items</h2>
+  <h1>Items</h1>
   
   <div class="item-grid">
     {#each items as item (item.itemId)}
       <div class="item-box">
         <ul class="item-list">
-          <li><strong>Name:</strong> {item.name}</li>
-          <li><strong>Country:</strong> {item.country}</li>
-          <li><strong>Hobby:</strong> {item.hobby}</li>
+          <li>Name: {item.name}</li>
+          <li>Country: {item.country}</li>
+          <li>Hobby: {item.hobby}</li>
         </ul>
-        <div class="item-buttons">
+        <div>
+          <Button color="green" on:click={() => updateItem(item.itemId, { name: 'new name', country: 'new country', hobby: 'new hobby' })}>Update</Button>
           <Button color="red" on:click={() => deleteItem(item.itemId)}>Delete</Button>
-          <Button color="green" on:click={() => updateItem(item.itemId)}>Update</Button>
         </div>
       </div>
     {/each}
+    {#if showUpdateModal}
+  <UpdateModal item={selectedItem} on:close={closeUpdateModal} on:update={updateItem} />
+{/if}
   </div>
+
   <style>
-    .item-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-  
     .item-box {
       padding: 1rem;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      box-shadow: 2px 2px #eee;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      margin: 0.5rem;
+      display: flex;
+      flex-direction: column;
     }
   
     .item-list {
       list-style: none;
-      padding: 0;
       margin: 0;
+      padding: 0;
     }
   
-    .item-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1rem;
+    .item-list li {
+      margin-bottom: 0.5rem;
+    }
+  
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 1rem;
     }
   </style>
