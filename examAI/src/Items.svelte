@@ -32,6 +32,7 @@
   };
 
   function openUpdateModal(item) {
+  function openUpdateModal(item) {
     showUpdateModal = true;
     selectedItem = item;
   }
@@ -70,6 +71,32 @@
     />
   {/if}
 </div>
+
+<style>
+  .item-box {
+    padding: 1rem;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .item-list li {
+    margin-bottom: 0.5rem;
+  }
+
+  .item-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+  }
+</style>
 
 <style>
   .item-box {
