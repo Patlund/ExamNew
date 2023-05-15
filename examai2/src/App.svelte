@@ -1,21 +1,23 @@
 <script>
-  import { activeMenu } from "./store";
+  import { activeMenu } from "./store.js";
   import List from "./List.svelte";
   import Create from "./Create.svelte";
 </script>
 
 <div class="menu">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <span
     class="menu-item"
     class:active={$activeMenu === "Items"}
-    on:click={() => $activeMenu.set("Items")}
+    on:click={() => activeMenu.set("Items")}
   >
     Items
   </span>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <span
     class="menu-item"
     class:active={$activeMenu === "Add New Items"}
-    on:click={() => $activeMenu.set("Add New Items")}
+    on:click={() => activeMenu.set("Add New Items")}
   >
     Add New Items
   </span>

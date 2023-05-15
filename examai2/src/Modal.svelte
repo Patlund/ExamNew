@@ -1,8 +1,8 @@
 <script>
     import Button from "./Button.svelte";
     export let open = false;
-    export let currentItem = { name: "", country: "", hobby: "" };
-    export let updateItem = () => {};
+    export let currentItem = { itemId: null, name: "", country: "", hobby: "" };
+    export let updateItem;
 
     function close() {
         open = false;
@@ -10,6 +10,7 @@
 </script>
 
 {#if open}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="modal" on:click={close}>
         <div class="modal-content" on:click={(e) => e.stopPropagation()}>
             <h2>Edit Item</h2>
