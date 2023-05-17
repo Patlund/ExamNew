@@ -17,7 +17,6 @@
   });
 
   const deleteItem = async (itemId) => {
-    console.log("Hej från delete!");
     await fetch(`/api/items/${itemId}`, { method: "DELETE" });
     items = items.filter((item) => item.itemId !== itemId);
   };

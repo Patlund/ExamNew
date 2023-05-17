@@ -31,7 +31,6 @@
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
     createItem();
   };
 
