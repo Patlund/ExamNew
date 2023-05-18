@@ -30,16 +30,12 @@
     }
   };
 
-  const handleSubmit = (event) => {
-    createItem();
-  };
-
   onMount(() => {
     // highlight 'Add New Items' in the menu
   });
 </script>
 
-<form on:submit={handleSubmit}>
+<form on:submit={createItem}>
   <div class="add-new-item">
     <div class="input-field">
       <label for="name">Enter your full name</label>
