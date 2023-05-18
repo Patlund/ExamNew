@@ -1,5 +1,8 @@
 <script>
     export let color = "blue";
+    import { createEventDispatcher } from "svelte";
+
+    let dispatch = createEventDispatcher();
 </script>
 
 <button

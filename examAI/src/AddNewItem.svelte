@@ -31,7 +31,6 @@
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
     createItem();
   };
 
@@ -54,7 +53,7 @@
       <label for="hobby">What's your favourite hobby?</label>
       <input type="text" id="hobby" bind:value={hobby} />
     </div>
-    <Button color="green" type="submit">Create Item</Button>
+    <Button color="green" on:click={() => createItem}>Create Item</Button>
   </div>
 </form>
 

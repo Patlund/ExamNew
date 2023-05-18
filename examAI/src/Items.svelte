@@ -17,12 +17,12 @@
   });
 
   const deleteItem = async (itemId) => {
-    await fetch(`/items/${itemId}`, { method: "DELETE" });
+    await fetch(`/api/items/${itemId}`, { method: "DELETE" });
     items = items.filter((item) => item.itemId !== itemId);
   };
 
   const updateItem = async (itemId, updatedItem) => {
-    await fetch(`/items/${itemId}`, {
+    await fetch(`/api/items/${itemId}`, {
       method: "PUT",
       body: JSON.stringify(updatedItem),
     });
@@ -52,14 +52,8 @@
         <li>Hobby: {item.hobby}</li>
       </ul>
       <div>
-        <Button
-          color="green"
-          on:click={() =>
-            updateItem(item.itemId, {
-              name: "new name",
-              country: "new country",
-              hobby: "new hobby",
-            })}>Update</Button
+        <Button color="green" on:click={() => openUpdateModal(item)}
+          >Update</Button
         >
         <Button color="red" on:click={() => deleteItem(item.itemId)}
           >Delete</Button

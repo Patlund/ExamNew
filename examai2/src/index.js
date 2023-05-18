@@ -1,5 +1,5 @@
-const express = require('express');
-const mysql = require('mysql2');
+import express from 'express';
+import  mysql from 'mysql2';
 
 const app = express();
 app.use(express.json());
@@ -18,12 +18,12 @@ app.get('/', (req, res) => {
   res.send('Hello, Express and MySQL2!');
 });
 
-app.post('/items', (req, res) => {
+app.post('/api/items', (req, res) => {
   const itemId = Math.floor(Math.random() * 1000000000);
   const { name, country, hobby } = req.body;
 
   pool.query(
-    'INSERT INTO items (itemId, name, country, hobby) VALUES (?, ?, ?, ?)',
+    'INSERT INTO personalinfo (itemId, name, country, hobby) VALUES (?, ?, ?, ?)',
     [itemId, name, country, hobby],
     (error, results) => {
       if (error) {
@@ -36,12 +36,12 @@ app.post('/items', (req, res) => {
   );
 });
 
-app.put('/items/:itemId', (req, res) => {
+app.put('/api/items/:itemId', (req, res) => {
   const { itemId } = req.params;
   const { name, country, hobby } = req.body;
 
   pool.query(
-    'UPDATE items SET name = ?, country = ?, hobby = ? WHERE itemId = ?',
+    'UPDATE personalinfo SET name = ?, country = ?, hobby = ? WHERE itemId = ?',
     [name, country, hobby, itemId],
     (error, results) => {
       if (error) {
@@ -54,10 +54,10 @@ app.put('/items/:itemId', (req, res) => {
   );
 });
 
-app.delete('/items/:itemId', (req, res) => {
+app.delete('/api/items/:itemId', (req, res) => {
   const { itemId } = req.params;
 
-  pool.query('DELETE FROM items WHERE itemId = ?', [itemId], (error, results) => {
+  pool.query('DELETE FROM personalinfo WHERE itemId = ?', [itemId], (error, results) => {
     if (error) {
       console.error(error);
       res.status(500).json({ message: 'Error deleting item' });
@@ -67,8 +67,8 @@ app.delete('/items/:itemId', (req, res) => {
   });
 });
 
-app.get('/items', (req, res) => {
-  pool.query('SELECT * FROM items', (error, results) => {
+app.get('/api/items', (req, res) => {
+  pool.query('SELECT * FROM personalinfo', (error, results) => {
     if (error) {
       console.error(error);
       res.status(500).json({ message: 'Error fetching items' });
