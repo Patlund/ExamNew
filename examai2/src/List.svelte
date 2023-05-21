@@ -38,14 +38,18 @@
 
 <!-- List component content and styles -->
 
-<div class="items-list">
+<div class="items-grid">
     {#each items as item (item.itemId)}
-        <div class="item">
-            <p>{item.name} - {item.country} - {item.hobby}</p>
+        <div class="item-box">
+            <ul class="item-list">
+                <li>Name: {item.name}</li>
+                <li>Country: {item.country}</li>
+                <li>Hobby: {item.hobby}</li>
+            </ul>
             <Button color="green" on:click={() => openModal(item)}>Edit</Button>
-            <Button color="red" on:click={() => deleteItem(item.itemId)}>
-                Delete
-            </Button>
+            <Button color="red" on:click={() => deleteItem(item.itemId)}
+                >Delete</Button
+            >
         </div>
     {/each}
 </div>
@@ -53,22 +57,27 @@
 <Modal bind:open={modalOpen} bind:currentItem {updateItem} />
 
 <style>
-    .items-list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        margin-top: 20px;
+    .items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
     }
 
-    .item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
+    .item-box {
         border: 1px solid #ddd;
         border-radius: 5px;
-        width: 80%;
-        max-width: 400px;
+        padding: 1rem;
+        background-color: #f9f9f9;
+    }
+
+    .item-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .item-list li {
+        margin-bottom: 0.5rem;
     }
 </style>
